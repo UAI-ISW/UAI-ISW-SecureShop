@@ -5,9 +5,10 @@
 **Propósito docente:** demostrar que se parte de un proyecto real e imperfecto y que la
 **primera prioridad del Sprint 1 es seguridad** (identidad con QuickLogin/NeuroLedger).
 
-> Estado dinámico (DAST): pendiente de correr con la app levantada (ver
-> `owasp-secureshop-test-plan.md` cuando esté disponible). Los hallazgos siguientes son por
-> lectura de código y son reproducibles localmente.
+> Estado dinámico (DAST): plan de pruebas definido en
+> [`owasp-secureshop-test-plan.md`](owasp-secureshop-test-plan.md) (ambiente, casos TC-01…TC-09,
+> OWASP ZAP y enfoque GenAI); pendiente de **ejecutar** con la app levantada. Los hallazgos
+> siguientes son por lectura de código y son reproducibles localmente.
 
 ## Resumen de hallazgos
 

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas de Mascotas Rescatadas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .empty-message {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Estadísticas de Mascotas Rescatadas</h1>
+    {% if mascotas %}
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>RUT Dueño</th>
+            <th>Chip</th>
+            <th>Edad</th>
+            <th>Color</th>
+            <th>Tipo</th>
+            <th>Fecha Registro</th>
+        </tr>
+        {% for mascota in mascotas %}
+        <tr>
+            <td>{{ mascota.id }}</td>
+            <td>{{ mascota.nombre }}</td>
+            <td>{{ mascota.rut }}</td>
+            <td>{{ mascota.chip }}</td>
+            <td>{{ mascota.edad }}</td>
+            <td>{{ mascota.color }}</td>
+            <td>{{ mascota.tipo }}</td>
+            <td>{{ mascota.fecha_registro }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <div class="empty-message">
+        <p>No hay mascotas registradas todavía.</p>
+    </div>
+    {% endif %}
+</body>
+</html> 

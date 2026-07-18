@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .total {
+            text-align: right;
+            font-size: 1.2em;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .total strong {
+            color: #28a745;
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        .navigation {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .nav-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 0 10px;
+        }
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+        .nav-btn.checkout {
+            background-color: #28a745;
+        }
+        .nav-btn.checkout:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Carrito de Compras</h1>
+        
+        {% if carrito %}
+        <table>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+            </tr>
+            {% for producto in carrito %}
+            <tr>
+                <td>{{ producto.nombre }}</td>
+                <td>${{ "{:,}".format(producto.precio) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <div class="total">
+            Total: <strong>${{ "{:,}".format(total) }}</strong>
+        </div>
+        
+        <div class="navigation">
+            <a href="/" class="nav-btn">Seguir Comprando</a>
+            <a href="#" class="nav-btn checkout">Finalizar Compra</a>
+        </div>
+        {% else %}
+        <div class="empty-cart">
+            <p>El carrito está vacío</p>
+            <div class="navigation">
+                <a href="/" class="nav-btn">Ir a la Tienda</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html> 

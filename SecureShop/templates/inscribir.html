@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscribir Mascota</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .navigation {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .navigation a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Inscribir Mascota</h1>
+        <form method="POST">
+            <div class="form-group">
+                <label for="nombre">Nombre de la Mascota:</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="rut">RUT del Dueño:</label>
+                <input type="text" id="rut" name="rut" required>
+            </div>
+            <div class="form-group">
+                <label for="chip">Número de Chip:</label>
+                <input type="text" id="chip" name="chip">
+            </div>
+            <div class="form-group">
+                <label for="edad">Edad:</label>
+                <input type="text" id="edad" name="edad" required>
+            </div>
+            <div class="form-group">
+                <label for="color">Color:</label>
+                <input type="text" id="color" name="color" required>
+            </div>
+            <div class="form-group">
+                <label for="tipo">Tipo de Mascota:</label>
+                <select id="tipo" name="tipo" required>
+                    <option value="">Seleccione un tipo</option>
+                    <option value="Perro">Perro</option>
+                    <option value="Gato">Gato</option>
+                    <option value="Ave">Ave</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+            <button type="submit">Registrar Mascota</button>
+        </form>
+        <div class="navigation">
+            <a href="/">Volver a la Tienda</a>
+        </div>
+    </div>
+</body>
+</html> 

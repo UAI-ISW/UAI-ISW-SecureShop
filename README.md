@@ -8,7 +8,7 @@ limpio, partimos de la realidad** y la primera misión del equipo es entenderlo 
 seguro.
 
 > Autoría y titularidad: material docente de la **UAI** (Prof. Romina Torres). Uso
-> educativo. Ver `NOTICE.md` y `LICENSE` (por definir).
+> educativo. Licencia **CC BY-NC-SA 4.0** — ver `LICENSE` y `NOTICE.md`.
 
 ## Qué hay aquí
 
@@ -16,8 +16,7 @@ seguro.
 |---|---|---|
 | `SecureShop/` | Versión original (Flask plano: `api.py`, `secureshop.py`, `securesoftware.py` + `templates/` + `secure_shop.db`) | **Base oficial** que los equipos forkean y aseguran |
 | `SecureShopRefactorizadoMVC/` | Refactor a MVC (blueprints + `models/` + `controllers/`) | Referencia de cómo separar responsabilidades |
-| `docs/` | Arquitectura y comparativa de referencia | Ingeniería reversa e insumos docentes |
-| `security/` | Auditoría OWASP y plan de pruebas | Insumo del hito de seguridad (Sprint 1) |
+| `security/` | Auditoría OWASP y hallazgos | Insumo del hito de seguridad (Sprint 1) |
 
 ## Arquitectura (versión original)
 
@@ -61,7 +60,7 @@ python app.py            # http://localhost:5003
 
 ## El recorrido del curso
 
-1. **Ingeniería reversa** — leer el código y reconstruir la arquitectura (ver `docs/`).
+1. **Ingeniería reversa** — leer el código y reconstruir la arquitectura (ver sección "Arquitectura" arriba).
 2. **Seguridad primero** — correr la auditoría OWASP (`security/`) sobre este mismo código.
    SecureShop tiene fallas reales: contraseñas en texto plano, sin sesión/autorización,
    `debug=True`, PII de mascotas (RUT, chip) expuesta sin control, CORS abierto.

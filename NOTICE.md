@@ -18,5 +18,7 @@ mejoran (empezando por seguridad).
 
 ## Licencia
 
-La licencia definitiva está **por confirmar** (ver `LICENSE`). Al ser obra propia de la
-UAI/docente, no hay restricciones de terceros que impidan reutilizarla con fines educativos.
+**CC BY-NC-SA 4.0** (Atribución–NoComercial–CompartirIgual). Ver `LICENSE`.
+Atribución requerida: *Romina Torres / Universidad Adolfo Ibáñez (UAI)*. Uso no comercial;
+las obras derivadas deben mantener la misma licencia. Al ser obra propia de la UAI/docente,
+no hay restricciones de terceros que impidan reutilizarla con fines educativos.

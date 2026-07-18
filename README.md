@@ -4,8 +4,9 @@ Aplicación de ejemplo para el curso de **Ingeniería de Software (ISW)**. Secur
 una pequeña **tienda + registro de mascotas** escrita en Flask. Es un proyecto **real e
 imperfecto**: funciona, pero arrastra malas prácticas de seguridad típicas de un primer
 prototipo. Por eso es el punto de partida ideal del curso: **no partimos de un proyecto
-limpio, partimos de la realidad** y la primera misión del equipo es entenderlo y hacerlo
-seguro.
+limpio, partimos de la realidad**. La primera misión del equipo es *hacerse cargo* del
+sistema —levantarlo, montar el espacio de trabajo y entenderlo (mentalidad de
+**mantención**)— y desde ahí **construir el backlog desde cero**.
 
 > Autoría y titularidad: material docente de la **UAI** (Prof. Romina Torres). Uso
 > educativo. Licencia **CC BY-NC-SA 4.0** — ver `LICENSE` y `NOTICE.md`.
@@ -58,16 +59,19 @@ python app.py            # http://localhost:5003
 > La variante MVC referencia `templates/` (reutiliza los de `SecureShop/templates`); si
 > la ejecutas aislada, copia esa carpeta.
 
-## El recorrido del curso
+## El recorrido del curso (ISW)
 
-1. **Ingeniería reversa** — leer el código y reconstruir la arquitectura (ver sección "Arquitectura" arriba).
-2. **Seguridad primero** — correr la auditoría OWASP (`security/`) sobre este mismo código.
-   SecureShop tiene fallas reales: contraseñas en texto plano, sin sesión/autorización,
-   `debug=True`, PII de mascotas (RUT, chip) expuesta sin control, CORS abierto.
-3. **QuickLogin (NeuroLedger)** — la primera historia técnica: reemplazar el "login" de
-   juguete por **identidad verificable y autorización auditable**.
-4. **Iterar** — de ahí en adelante, tres sprints (Scrum + XP) sobre una base que el equipo
-   ya entiende.
+1. **Levantar y hacerse cargo** — poner el sistema heredado a correr y montar el espacio de
+   trabajo del equipo (mantención primero).
+2. **Ingeniería reversa** — leer el código y reconstruir la arquitectura (ver sección
+   "Arquitectura" arriba).
+3. **Backlog desde cero** — con el sistema entendido, construir el product backlog con lo que
+   necesita.
+4. **Iterar** — tres sprints (Scrum + XP), diseñando con **seguridad como atributo de
+   calidad** (identidad, autorización, registro auditable; aspiración: QuickLogin/NeuroLedger).
 
-Ver `security/owasp-secureshop-hallazgos.md` para el detalle de vulnerabilidades y su mapeo
-al OWASP Top 10:2021.
+> **Nota sobre seguridad.** SecureShop tiene fallas reales (contraseñas en texto plano, sin
+> sesión/autorización, `debug=True`, PII de mascotas expuesta, CORS abierto). El **análisis
+> OWASP formal** y su informe de pruebas se trabajan en el curso de **Seguridad TI**; el
+> curso de ISW **no depende** de ese informe. La carpeta `security/` es insumo de ese otro
+> curso.

@@ -11,3 +11,9 @@ env/
 
 # Local runtime
 *.log
+
+# Secretos locales (Sprint 1 · chore H2)
+.env
+SecureShop/.env
+# BD de pruebas
+SecureShop/tests/*.db

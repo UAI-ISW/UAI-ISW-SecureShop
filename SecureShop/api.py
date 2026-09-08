@@ -1,13 +1,27 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+import os
 import sqlite3
 from datetime import datetime
+
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+
+# Sprint 1 · chore (H2): configuración desde variables de entorno.
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:  # dotenv es opcional; en CI/env las vars ya vienen del entorno
+    pass
+
+DB_PATH = os.environ.get('SECURE_SHOP_DB', 'secure_shop.db')
+ADMIN_USER = os.environ.get('ADMIN_USER', 'admin')
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'colocolo')
 
 app = Flask(__name__)
 CORS(app)
 
+
 def init_db():
-    conn = sqlite3.connect('secure_shop.db')
+    conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     # Crear tabla de mascotas
     c.execute('''
@@ -30,16 +44,17 @@ def init_db():
             password TEXT NOT NULL
         )
     ''')
-    # Insertar usuario admin
-    c.execute('INSERT OR IGNORE INTO usuarios (usuario, password) VALUES (?, ?)', 
-             ('admin', 'colocolo'))
+    # Insertar usuario admin (credenciales desde el entorno)
+    c.execute('INSERT OR IGNORE INTO usuarios (usuario, password) VALUES (?, ?)',
+              (ADMIN_USER, ADMIN_PASSWORD))
     conn.commit()
     conn.close()
+
 
 @app.route('/registrar_mascota', methods=['POST'])
 def registrar_mascota():
     data = request.json
-    conn = sqlite3.connect('secure_shop.db')
+    conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute('''
         INSERT INTO mascotas (nombre, rut, chip, edad, color, tipo, fecha_registro)
@@ -57,9 +72,10 @@ def registrar_mascota():
     conn.close()
     return jsonify({'message': 'Mascota registrada'}), 201
 
+
 @app.route('/mascotas', methods=['GET'])
 def get_mascotas():
-    conn = sqlite3.connect('secure_shop.db')
+    conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute('SELECT * FROM mascotas')
     mascotas = [
@@ -78,6 +94,7 @@ def get_mascotas():
     conn.close()
     return jsonify(mascotas)
 
+
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True, port=5001) 
+    app.run(debug=True, port=5001)

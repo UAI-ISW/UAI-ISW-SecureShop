@@ -4,6 +4,7 @@ from datetime import datetime
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from werkzeug.security import generate_password_hash
 
 # Sprint 1 · chore (H2): configuración desde variables de entorno.
 try:
@@ -44,9 +45,12 @@ def init_db():
             password TEXT NOT NULL
         )
     ''')
-    # Insertar usuario admin (credenciales desde el entorno)
-    c.execute('INSERT OR IGNORE INTO usuarios (usuario, password) VALUES (?, ?)',
-              (ADMIN_USER, ADMIN_PASSWORD))
+    # Insertar/actualizar admin con contraseña HASHEADA (US-01, corrige H1).
+    # El upsert re-hashea también bases heredadas que traían texto plano.
+    c.execute(
+        '''INSERT INTO usuarios (usuario, password) VALUES (?, ?)
+           ON CONFLICT(usuario) DO UPDATE SET password = excluded.password''',
+        (ADMIN_USER, generate_password_hash(ADMIN_PASSWORD)))
     conn.commit()
     conn.close()
 

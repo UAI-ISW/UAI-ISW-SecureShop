@@ -1,8 +1,10 @@
 import os
 import sqlite3
+from datetime import timedelta
 
 import requests
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
+from werkzeug.security import check_password_hash
 
 # Sprint 1 · chore (H2): configuración desde variables de entorno.
 try:
@@ -17,6 +19,8 @@ API_URL = os.environ.get('API_URL', 'http://localhost:5001')
 app = Flask(__name__)
 # La clave de sesión ya no vive en el código (H2).
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-only-change-me')
+# La sesión expira (US-01): no queda abierta para siempre.
+app.permanent_session_lifetime = timedelta(hours=1)
 
 
 @app.route('/')
@@ -32,12 +36,15 @@ def login():
 
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
-        c.execute('SELECT * FROM usuarios WHERE usuario = ? AND password = ?',
-                  (usuario, password))
-        user = c.fetchone()
+        c.execute('SELECT password FROM usuarios WHERE usuario = ?', (usuario,))
+        row = c.fetchone()
         conn.close()
 
-        if user:
+        # US-01: verificación contra el hash + creación de sesión real.
+        if row and check_password_hash(row[0], password):
+            session.permanent = True
+            session['usuario'] = usuario
+            session['rol'] = 'admin'
             return redirect(url_for('estadisticas'))
         else:
             return 'Credenciales incorrectas'

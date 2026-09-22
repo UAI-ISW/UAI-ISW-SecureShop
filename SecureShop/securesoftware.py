@@ -1,6 +1,7 @@
 import os
 import sqlite3
 from datetime import timedelta
+from functools import wraps
 
 import requests
 from flask import Flask, render_template, request, redirect, url_for, session
@@ -21,6 +22,20 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-only-change-me')
 # La sesión expira (US-01): no queda abierta para siempre.
 app.permanent_session_lifetime = timedelta(hours=1)
+
+
+def login_required(rol=None):
+    """US-02: exige sesión (y opcionalmente un rol) para acceder a la vista."""
+    def decorador(vista):
+        @wraps(vista)
+        def envoltura(*args, **kwargs):
+            if 'usuario' not in session:
+                return redirect(url_for('login'))
+            if rol is not None and session.get('rol') != rol:
+                return redirect(url_for('login'))
+            return vista(*args, **kwargs)
+        return envoltura
+    return decorador
 
 
 @app.route('/')
@@ -51,7 +66,14 @@ def login():
     return render_template('login.html')
 
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
+
 @app.route('/estadisticas')
+@login_required(rol='admin')
 def estadisticas():
     response = requests.get(f'{API_URL}/mascotas')
     mascotas = response.json()

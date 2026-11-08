@@ -100,7 +100,7 @@ Procedimiento aplicado (todo por **lectura de código**, sin ejecutar):
 
 ## 4. Plan de pruebas dinámicas (DAST) — casos por hallazgo
 
-Cada caso indica: **objetivo**, **OWASP** (Top 10 + WSTG), **pasos/PoC**, **evidencia esperada** y **criterio de resultado** (Pass = seguro / Fail = vulnerable). Hoy, con el código base, **se espera FAIL** en H1–H8; los mismos casos sirven de *regresión* cuando el equipo implemente las remediaciones (QuickLogin/NeuroLedger).
+Cada caso indica: **objetivo**, **OWASP** (Top 10 + WSTG), **pasos/PoC**, **evidencia esperada** y **criterio de resultado** (Pass = seguro / Fail = vulnerable). Hoy, con el código base, **se espera FAIL** en H1–H8; los mismos casos sirven de regresión cuando una remediación entre.
 
 ### TC-01 — Control de acceso roto en la API (H2)
 - **OWASP:** A01:2021 · WSTG-ATHZ-02 (bypass del esquema de autorización).
@@ -135,7 +135,7 @@ Cada caso indica: **objetivo**, **OWASP** (Top 10 + WSTG), **pasos/PoC**, **evid
   2. Inspeccionar la BD: `sqlite3 SecureShop/secure_shop.db "select usuario,password from usuarios;"` → contraseña en claro.
   3. Probar ausencia de bloqueo por fuerza bruta (repetir logins fallidos).
 - **Evidencia esperada:** password legible en claro; sin lockout ni rate-limit.
-- **Resultado:** *Fail*. *Pass* con hash (bcrypt/argon2) o identidad delegada (QuickLogin) + control de intentos.
+- **Resultado:** *Fail*. *Pass* con hash (bcrypt/argon2) y control de intentos. No guardar ninguna clave propia es US-05 y no está en esta entrega.
 
 ### TC-05 — Debugger de Werkzeug expuesto (H5)
 - **OWASP:** A05:2021 · WSTG-ERRH-02 (stack traces) · WSTG-CONF-02.
@@ -165,7 +165,7 @@ Cada caso indica: **objetivo**, **OWASP** (Top 10 + WSTG), **pasos/PoC**, **evid
 - **OWASP:** A09:2021 · WSTG-. (logging & monitoring).
 - **Pasos:** ejecutar TC-01..TC-06 y revisar si queda **algún** registro de accesos/operaciones sensibles.
 - **Evidencia esperada:** sin logs de acceso a PII ni de login.
-- **Resultado:** *Fail*. *Pass* con log estructurado por acción (enlaza con trazabilidad NeuroLedger).
+- **Resultado:** *Fail*. *Pass* con un registro de la acción, sin volcar el RUT (T06).
 
 ### TC-09 — Regresión: inyección SQL y XSS (no regresionar)
 - **OWASP:** A03:2021 · WSTG-INPV-05 (SQLi) · WSTG-INPV-01 (XSS reflejado).
@@ -216,7 +216,7 @@ Hay dos usos distintos y ambos aplican al curso:
    - **Triage** de los resultados de ZAP: pedir al modelo que priorice alertas, descarte falsos positivos y redacte remediaciones.
    - Add-ons/experimentos de ZAP que integran LLM para sugerir vectores; existen extensiones comunitarias que conectan ZAP con modelos. **Regla:** nunca pegar PII/secretos reales en un LLM externo; usar solo datos sandbox.
 
-2. **Si SecureShop incorpora un LLM (futuro: QuickLogin/NeuroLedger o un asistente):**
+2. **Si más adelante la tienda incorpora un modelo de lenguaje:**
    - Aplicar **OWASP Top 10 for LLM Applications** (p. ej. *prompt injection*, fuga de datos, salida insegura) además del Top 10 web.
    - Añadir casos TC específicos de LLM en ese momento.
 
@@ -269,7 +269,7 @@ Un incremento de seguridad se considera **Hecho** cuando:
 - [ ] TC-09 sigue en **Pass** (sin regresiones de SQLi/XSS).
 - [ ] Reporte de OWASP ZAP adjunto, con alertas altas/medias resueltas o justificadas.
 - [ ] Cero PII real y cero secretos en el repo (verificado con `gitleaks`).
-- [ ] Remediaciones alineadas con la historia técnica de identidad (QuickLogin/NeuroLedger) y con logging/trazabilidad (H8).
+- [ ] Logging y trazabilidad de inscribir, sin volcar el RUT (T06). US-05, identidad sin clave propia, no es esta entrega.
 
 ---
 

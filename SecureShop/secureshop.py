@@ -3,7 +3,7 @@ from datetime import timedelta
 from functools import wraps
 
 import requests
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import Flask, Response, flash, redirect, render_template, request, session, url_for
 
 try:
     from dotenv import load_dotenv
@@ -13,6 +13,7 @@ except ImportError:
 
 from nucleo.carrito import carrito_del_proceso
 from nucleo.catalogo import CATALOGO, buscar
+from nucleo.pago import StubWebpay, pagar_carrito
 from nucleo.repositorio import Repositorio
 
 DB_PATH = os.environ.get('SECURE_SHOP_DB', 'secure_shop.db')
@@ -25,6 +26,8 @@ app.permanent_session_lifetime = timedelta(hours=1)
 
 carrito = carrito_del_proceso
 repo = Repositorio(DB_PATH)
+# La presentación depende de la interfaz. Hoy la implementación conectada es el stub.
+pasarela = StubWebpay()
 
 
 def login_required(rol=None):
@@ -90,9 +93,14 @@ def ver_carrito():
 @app.route('/comprar', methods=['POST'])
 @login_required()
 def comprar():
-    if carrito:
-        carrito.vaciar()
-        flash('Compra registrada.')
+    if not carrito:
+        flash('El carrito está vacío.')
+        return redirect(url_for('ver_carrito'))
+    resultado = pagar_carrito(carrito, pasarela)
+    if not resultado.aprobado:
+        flash(resultado.mensaje)
+        return redirect(url_for('ver_carrito'))
+    flash('Compra registrada. ' + resultado.mensaje)
     return redirect(url_for('tienda'))
 
 
@@ -108,8 +116,20 @@ def inscribir_mascota():
             'color': request.form['color'],
             'tipo': request.form['tipo'],
         }
+        archivo = request.files.get('imagen')
+        files = None
+        if archivo and archivo.filename:
+            files = {
+                'imagen': (
+                    archivo.filename,
+                    archivo.read(),
+                    archivo.mimetype or 'application/octet-stream',
+                ),
+            }
         try:
-            response = requests.post(f'{API_URL}/registrar_mascota', json=datos, timeout=3)
+            response = requests.post(
+                f'{API_URL}/registrar_mascota', data=datos, files=files, timeout=10,
+            )
         except requests.RequestException:
             flash('No pude hablar con la API (puerto 5001).')
             return render_template('inscribir.html')
@@ -117,6 +137,9 @@ def inscribir_mascota():
         if response.status_code == 201:
             # No queda un log de quién inscribió. Hallazgo A09.
             flash('Mascota registrada.')
+            cuerpo = response.json() if response.content else {}
+            if files and not cuerpo.get('imagen_guardada'):
+                flash('La foto no se guardó. Sirve jpg, png, gif o webp, hasta 2 MB.')
             return redirect(url_for('estadisticas'))
         flash('No se pudo registrar la mascota.')
 
@@ -134,6 +157,19 @@ def estadisticas():
     except requests.RequestException:
         flash('No pude leer las mascotas. ¿Está la API en el puerto 5001?')
     return render_template('estadisticas.html', mascotas=mascotas)
+
+
+@app.route('/mascota/<int:mascota_id>/imagen')
+@login_required()
+def imagen_mascota(mascota_id):
+    try:
+        response = requests.get(f'{API_URL}/mascotas/{mascota_id}/imagen', timeout=5)
+    except requests.RequestException:
+        return '', 404
+    if response.status_code != 200:
+        return '', 404
+    tipo = response.headers.get('Content-Type', 'application/octet-stream')
+    return Response(response.content, mimetype=tipo)
 
 
 if __name__ == '__main__':

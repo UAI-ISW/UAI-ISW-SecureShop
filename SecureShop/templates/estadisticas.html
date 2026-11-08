@@ -6,6 +6,7 @@
 <div class="card">
     <table>
         <tr>
+            <th>Foto</th>
             <th>Nombre</th>
             <th>RUT dueño</th>
             <th>Chip</th>
@@ -16,6 +17,11 @@
         </tr>
         {% for mascota in mascotas %}
         <tr>
+            <td>
+                {% if mascota.tiene_imagen %}
+                <img class="foto" src="{{ url_for('imagen_mascota', mascota_id=mascota.id) }}" alt="">
+                {% endif %}
+            </td>
             <td>{{ mascota.nombre }}</td>
             <td>{{ mascota.rut }}</td>
             <td>{{ mascota.chip }}</td>

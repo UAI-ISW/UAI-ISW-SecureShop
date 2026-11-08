@@ -13,6 +13,7 @@ env/
 *.log
 .pytest_cache/
 SecureShop/.pytest_cache/
+SecureShop/reporte-noche.xml
 
 # Secretos locales (Sprint 1 · chore H2)
 .env

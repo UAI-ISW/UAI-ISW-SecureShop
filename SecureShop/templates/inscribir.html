@@ -2,7 +2,7 @@
 {% block title %}Inscribir mascota{% endblock %}
 {% block content %}
 <h1>Inscribir mascota</h1>
-<form class="card" method="POST">
+<form class="card" method="POST" enctype="multipart/form-data">
     <div class="campo">
         <label for="nombre">Nombre</label>
         <input type="text" id="nombre" name="nombre" required>
@@ -32,6 +32,10 @@
             <option value="Ave">Ave</option>
             <option value="Otro">Otro</option>
         </select>
+    </div>
+    <div class="campo">
+        <label for="imagen">Foto</label>
+        <input type="file" id="imagen" name="imagen" accept="image/jpeg,image/png,image/gif,image/webp">
     </div>
     <button class="btn verde" type="submit">Registrar</button>
 </form>

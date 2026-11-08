@@ -17,7 +17,7 @@ La aplicación que corre hoy es `secureshop.py` en `:5002` y `api.py` en `:5001`
 | H7 | CORS abierto | Abierto |
 | H8 | Sin registro de quién inscribió | Abierto |
 
-El plan dinámico sigue en [`owasp-secureshop-test-plan.md`](owasp-secureshop-test-plan.md) y no está ejecutado. Cómo se revisa un cambio con IA está en [`../docs/configuracion-y-pruebas-con-ia.md`](../docs/configuracion-y-pruebas-con-ia.md).
+El plan dinámico sigue en [`owasp-secureshop-test-plan.md`](owasp-secureshop-test-plan.md) y no está ejecutado. Configuración, CI, Antares y ZAP están en [`../docs/operacion.md`](../docs/operacion.md).
 
 ## Resumen de hallazgos (legado)
 
@@ -46,7 +46,6 @@ c.execute('SELECT * FROM usuarios WHERE usuario = ? AND password = ?', (usuario,
 ```
 - **Impacto:** cualquier acceso a `secure_shop.db` revela todas las credenciales. No hay hash.
 - **Remediación:** almacenar solo hash (bcrypt/argon2); comparar por verificación de hash.
-  En el curso: **sustituir por QuickLogin/NeuroLedger** (identidad verificable, sin custodiar contraseñas).
 
 ### H2 — Broken Access Control (A01)
 `/mascotas`, `/estadisticas` y `/registrar_mascota` no exigen autenticación ni autorización.
@@ -81,16 +80,13 @@ ejecución de código si se dispara una excepción.
 
 ### H8 — Sin auditoría (A09)
 No hay logging de accesos ni de operaciones sensibles (registro/consulta de PII).
-- **Remediación:** log estructurado por acción → conecta con **trazabilidad de NeuroLedger**.
+- **Remediación:** log estructurado por acción, sin volcar el RUT. Es T06 y sigue abierto.
 
 ## Lo que ya está bien (no regresionar)
 
 - **Consultas parametrizadas** → sin SQL injection (A03) en las rutas revisadas.
 - **Autoescape de Jinja2** → sin XSS por defecto en los `templates/`.
 
-## Del hallazgo a la solución del curso
+## Del hallazgo a lo que se hizo
 
-Los hallazgos H1–H4 justifican la **primera historia técnica**: reemplazar el login de
-juguete por **QuickLogin (NeuroLedger)** — identidad verificable, autorización como contrato
-auditable y trazabilidad (H8). Es el punto donde "seguridad primero" deja de ser eslogan y se
-vuelve el primer incremento demostrable.
+H1 (clave en claro) se cerró guardando el hash con salt. No custodiar ninguna clave propia, delegando la identidad a otro proveedor, es US-05 y no está en esta entrega.

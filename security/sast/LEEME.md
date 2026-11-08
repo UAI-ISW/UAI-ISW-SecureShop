@@ -6,4 +6,4 @@ El propio informe cita evidencia en `controllers/carrito_controller.py`. Eso es 
 
 No se re-corrió Antares después de unir login y tienda en el puerto 5002. Hasta eso, estos dos archivos son el insumo de la clase, no un hallazgo confirmado de la aplicación actual.
 
-La lectura manual sigue en [`../owasp-secureshop-hallazgos.md`](../owasp-secureshop-hallazgos.md). El recorrido para correr Antares sobre `SecureShop/` (no sobre la MVC) y para ZAP está en [`../../docs/qa/README.md`](../../docs/qa/README.md). El DAST (ZAP) está especificado y no ejecutado: [`../owasp-secureshop-test-plan.md`](../owasp-secureshop-test-plan.md).
+La lectura manual sigue en [`../owasp-secureshop-hallazgos.md`](../owasp-secureshop-hallazgos.md). Antares y ZAP sobre la app que usamos: [`../../docs/operacion.md`](../../docs/operacion.md). El plan dinámico largo, no ejecutado: [`../owasp-secureshop-test-plan.md`](../owasp-secureshop-test-plan.md).

@@ -1,0 +1,38 @@
+name: Noche
+
+# 01:00 hora de Chile (UTC-3). GitHub cuenta el cron en UTC.
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r SecureShop/requirements-dev.txt
+      - name: pytest (unidad, integración, hallazgos, aceptación)
+        working-directory: SecureShop
+        run: python -m pytest -q --junitxml=reporte-noche.xml
+      - name: Resumen
+        if: always()
+        run: |
+          {
+            echo "## Noche · pytest"
+            echo "Unidad, integración bottom-up, hallazgos que se conservan y aceptación."
+            echo "Antares y ZAP no corren acá: piden el modelo local o una persona."
+            echo "El XML queda en el artefacto reporte-noche."
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Publicar el reporte
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-noche
+          path: SecureShop/reporte-noche.xml

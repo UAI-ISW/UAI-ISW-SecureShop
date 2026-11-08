@@ -16,6 +16,7 @@
     <p class="total">Total: <strong>${{ "{:,}".format(total) }}</strong></p>
     <form method="POST" action="{{ url_for('comprar') }}">
         <button class="btn verde" type="submit">Finalizar compra</button>
+        <p class="hint">El pago lo responde el stub de Webpay. No sale a Transbank.</p>
     </form>
 </div>
 {% else %}

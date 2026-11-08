@@ -1,37 +1,36 @@
-"""Pruebas de aceptación del Sprint 1 (US-01 y US-02).
-
-Mapean 1:1 con el plan de aceptación del kit:
-- AC-LOGIN-OK    : login válido redirige a /estadisticas
-- AI-LOGIN-BAD   : login inválido no autentica
-- AI-EST-DIRECT  : /estadisticas sin sesión redirige a /login (corrige H3)
-- AC-EST-SESION  : /estadisticas con sesión lista las mascotas
-"""
-import securesoftware
+"""Aceptación: el login abre la tienda y /estadisticas sigue exigiendo sesión."""
+import secureshop
 
 
-def test_ac_login_ok(client):
+def test_login_entra_a_la_tienda(client):
     r = client.post('/login', data={'usuario': 'admin', 'password': 'colocolo'})
     assert r.status_code == 302
-    assert '/estadisticas' in r.headers['Location']
+    assert r.headers['Location'].endswith('/')
+
+    tienda = client.get('/')
+    assert tienda.status_code == 200
+    assert b'Collar para perro' in tienda.data
 
 
-def test_ai_login_bad(client):
+def test_login_invalido_no_entra(client):
     r = client.post('/login', data={'usuario': 'admin', 'password': 'incorrecta'})
     assert b'Credenciales incorrectas' in r.data
-    # y sigue sin poder entrar al panel
-    r2 = client.get('/estadisticas')
-    assert r2.status_code == 302
-    assert '/login' in r2.headers['Location']
+    assert client.get('/').status_code == 302
+    assert '/login' in client.get('/').headers['Location']
 
 
-def test_ai_est_direct_sin_sesion(client):
-    r = client.get('/estadisticas')
-    assert r.status_code == 302
-    assert '/login' in r.headers['Location']
+def test_rutas_sin_sesion_van_al_login(client):
+    for ruta in ('/', '/carrito', '/inscribir', '/estadisticas'):
+        r = client.get(ruta)
+        assert r.status_code == 302
+        assert '/login' in r.headers['Location']
 
 
-def test_ac_est_con_sesion(client, monkeypatch):
+def test_estadisticas_con_sesion(client, monkeypatch):
     class FakeResp:
+        def raise_for_status(self):
+            return None
+
         def json(self):
             return [{
                 'id': 1, 'nombre': 'tiger', 'rut': '12111111-1', 'chip': '1234',
@@ -39,7 +38,7 @@ def test_ac_est_con_sesion(client, monkeypatch):
                 'fecha_registro': '2025-04-06 18:43:58',
             }]
 
-    monkeypatch.setattr(securesoftware.requests, 'get', lambda *a, **k: FakeResp())
+    monkeypatch.setattr(secureshop.requests, 'get', lambda *a, **k: FakeResp())
     client.post('/login', data={'usuario': 'admin', 'password': 'colocolo'})
     r = client.get('/estadisticas')
     assert r.status_code == 200

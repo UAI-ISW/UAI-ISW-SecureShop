@@ -16,7 +16,7 @@ Este plan define **cómo se probó y cómo debe probarse** la seguridad de Secur
 | **Estático (SAST)** | Auditoría **sin ejecutar** la app: lectura de código, configuración y datos sembrados. | Revisión manual de código + mapeo OWASP Top 10. | **Hecho** → hallazgos H1–H8 |
 | **Dinámico (DAST)** | Pruebas **con la app en ejecución**: peticiones reales contra los endpoints. | OWASP ZAP + `curl`/`http` + scripts. | **Pendiente** → este plan lo especifica |
 
-**En alcance:** los tres procesos Flask de `SecureShop/` (`api.py`, `secureshop.py`, `securesoftware.py`), sus plantillas y la BD SQLite `secure_shop.db`. También la variante `SecureShopRefactorizadoMVC/`.
+**En alcance:** la aplicación que usamos, `SecureShop/secureshop.py` (`:5002`) y `SecureShop/api.py` (`:5001`), sus plantillas y `secure_shop.db`. `SecureShopRefactorizadoMVC/` no se prueba: no es la app de esta entrega.
 
 **Fuera de alcance:** infraestructura de despliegue real, pruebas de estrés/DoS, ingeniería social, y cualquier sistema que **no** sea la instancia local de laboratorio. **No** se prueban sistemas de terceros ni entornos productivos.
 
@@ -32,14 +32,14 @@ Este plan define **cómo se probó y cómo debe probarse** la seguridad de Secur
 [Tester / OWASP ZAP :8080]
         │  (proxy HTTP)
         ▼
-┌────────────────────────── host local (127.0.0.1) ──────────────────────────┐
-│  securesoftware.py :5002   secureshop.py :5003     api.py :5001             │
-│  (login/estadísticas)      (tienda/inscribir)      (API datos + CORS)       │
-│            └──────────────────────┴───── HTTP ─────────► api.py             │
-│                                                            │                │
-│                                                            ▼                │
-│                                                   SQLite: secure_shop.db     │
-└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────── host local (127.0.0.1) ────────────────────┐
+│  secureshop.py :5002                    api.py :5001            │
+│  login, tienda, carrito,                API de mascotas + CORS  │
+│  inscribir, estadísticas                       │                │
+│            └──────────── HTTP ─────────────────┘                │
+│                                                    ▼             │
+│                                           SQLite: secure_shop.db │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 ### 2.2 Componentes y superficie de ataque
@@ -47,9 +47,7 @@ Este plan define **cómo se probó y cómo debe probarse** la seguridad de Secur
 | Componente | Puerto | Endpoints expuestos | Notas de seguridad |
 |------------|--------|---------------------|--------------------|
 | `api.py` | `:5001` | `POST /registrar_mascota` · `GET /mascotas` | Sin auth · `CORS(app)` abierto · devuelve PII (rut, chip) |
-| `securesoftware.py` | `:5002` | `GET/POST /login` · `GET /estadisticas` · `GET /` | Login sin sesión · `/estadisticas` accesible directo |
-| `secureshop.py` | `:5003` | `/` · `/agregar/<id>` · `/carrito` · `GET/POST /inscribir` | Formulario que reenvía a la API |
-| BD | — | `secure_shop.db` (tablas `usuarios`, `mascotas`) | Contraseña en claro (`admin/colocolo`) |
+| `secureshop.py` | `:5002` | `/login` · `/` · `/carrito` · `/inscribir` · `/estadisticas` · `/logout` | La tienda y estadísticas exigen sesión. La API no |
 
 ### 2.3 Datos de prueba (sandbox)
 
@@ -59,14 +57,8 @@ Este plan define **cómo se probó y cómo debe probarse** la seguridad de Secur
 ### 2.4 Prerrequisitos y puesta en marcha
 
 ```bash
-cd SecureShop
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-
-# 3 terminales (o & en background)
-python api.py            # :5001  (crea la BD e inserta admin)
-python secureshop.py     # :5003
-python securesoftware.py # :5002
+./run-local.sh
+# API :5001 y aplicación :5002. Entrar por http://127.0.0.1:5002/login
 ```
 
 ### 2.5 Estado limpio / reset entre corridas
@@ -190,8 +182,8 @@ Cada caso indica: **objetivo**, **OWASP** (Top 10 + WSTG), **pasos/PoC**, **evid
 **OWASP ZAP** (*Zed Attack Proxy*) es el proxy de intercepción/scanner DAST de OWASP. Uso recomendado para SecureShop:
 
 1. **Modo proxy manual + exploración:** configurar el navegador para usar ZAP (`127.0.0.1:8080`), navegar tienda/login/estadísticas para poblar el árbol de sitios.
-2. **Spider / Ajax Spider:** descubrir rutas de los 3 servicios.
-3. **Active Scan:** lanzar el escaneo activo contra `:5001`, `:5002`, `:5003` (detecta CORS, cabeceras faltantes, errores/stack traces, etc.).
+2. **Spider / Ajax Spider:** descubrir rutas de la aplicación `:5002` y de la API `:5001`.
+3. **Active Scan:** lanzar el escaneo activo contra `:5001` y `:5002` (detecta CORS, cabeceras faltantes, errores/stack traces, etc.).
 4. **Automation Framework (repetible en CI):**
 
 ```yaml
@@ -202,7 +194,6 @@ env:
       urls:
         - http://localhost:5001
         - http://localhost:5002
-        - http://localhost:5003
 jobs:
   - type: spider
     parameters: { context: secureshop, maxDuration: 5 }

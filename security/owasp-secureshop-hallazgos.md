@@ -2,15 +2,24 @@
 
 **Alcance:** código de `SecureShop/` (versión original) y `SecureShopRefactorizadoMVC/`.
 **Metodología:** revisión de código (SAST manual) mapeada a **OWASP Top 10:2021**.
-**Propósito docente:** demostrar que se parte de un proyecto real e imperfecto y que la
-**primera prioridad del Sprint 1 es seguridad** (identidad con QuickLogin/NeuroLedger).
+**Propósito:** foto del legado. El detalle de abajo cita código que ya no está (`securesoftware.py`, clave en claro, login sin sesión). `SecureShopRefactorizadoMVC/` no se usa.
 
-> Estado dinámico (DAST): plan de pruebas definido en
-> [`owasp-secureshop-test-plan.md`](owasp-secureshop-test-plan.md) (ambiente, casos TC-01…TC-09,
-> OWASP ZAP y enfoque GenAI); pendiente de **ejecutar** con la app levantada. Los hallazgos
-> siguientes son por lectura de código y son reproducibles localmente.
+La aplicación que corre hoy es `secureshop.py` en `:5002` y `api.py` en `:5001`.
 
-## Resumen de hallazgos
+| # | En el legado | En esta copia |
+|---|---|---|
+| H1 | Clave en claro | Cerrado: se guarda hasheada |
+| H2 | Sin control de acceso | Parcial: `/estadisticas` pide sesión. La API no |
+| H3 | Login sin sesión | Cerrado: hay cookie y expiración |
+| H4 | RUT y chip sin autenticar | Abierto en `GET /mascotas` |
+| H5 | `debug=True` | Abierto en los dos procesos |
+| H6 | Secretos en el fuente | Parcial: existe `.env`; el fuente todavía tiene valor de relleno |
+| H7 | CORS abierto | Abierto |
+| H8 | Sin registro de quién inscribió | Abierto |
+
+El plan dinámico sigue en [`owasp-secureshop-test-plan.md`](owasp-secureshop-test-plan.md) y no está ejecutado. Cómo se revisa un cambio con IA está en [`../docs/configuracion-y-pruebas-con-ia.md`](../docs/configuracion-y-pruebas-con-ia.md).
+
+## Resumen de hallazgos (legado)
 
 | # | Hallazgo | OWASP 2021 | Severidad |
 |---|---|---|---|
@@ -23,7 +32,7 @@
 | H7 | CORS abierto a cualquier origen (`CORS(app)`) | A05 | Media |
 | H8 | Sin registro/auditoría de acciones | A09 | Media |
 
-## Detalle
+## Detalle del legado (no es el mapa del código actual)
 
 ### H1 — Contraseñas en texto plano (A07)
 `api.py` siembra el usuario con la clave en claro y el "login" la compara directamente:

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Levanta la API (:5001) y la aplicación (:5002). Ctrl-C detiene las dos.
+# Seguridad TI. Levanta la API (:5001) y la aplicación (:5002). Ctrl-C detiene las dos.
+# ISW levanta cada proceso a mano. Ver ISW/README.md.
 set -euo pipefail
 cd "$(dirname "$0")/SecureShop"
 

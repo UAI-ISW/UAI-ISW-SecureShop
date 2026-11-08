@@ -1,6 +1,6 @@
 # Arquitectura
 
-Tres estilos conviven. El detalle de clases y el mapa de pantallas están en el diseño: [`../03-diseno/README.md`](../03-diseno/README.md). Cómo se levanta esta topología está en [`../operacion.md`](../operacion.md). `SecureShopRefactorizadoMVC/` está en el repo y no forma parte de esta arquitectura.
+Tres estilos conviven. El detalle de clases y el mapa de pantallas están en el diseño: [`../03-diseno/README.md`](../03-diseno/README.md). Cómo se levanta esta topología, desde VS Code o Cursor, está en [`../README.md`](../README.md).
 
 ## Por capas
 

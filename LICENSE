@@ -1,5 +1,5 @@
-SecureShop — material docente ISW (UAI)
-Copyright (c) 2026 Romina Torres / Universidad Adolfo Ibáñez (UAI)
+SecureShop — material de curso (UAI)
+Copyright (c) 2026 AwareLab, Universidad Adolfo Ibáñez (UAI)
 
 Esta obra está licenciada bajo
 Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional
@@ -11,7 +11,7 @@ Usted es libre de:
 
 Bajo los siguientes términos:
   - Atribución (BY): debe dar crédito de manera adecuada a
-        Romina Torres / Universidad Adolfo Ibáñez (UAI),
+        AwareLab, Universidad Adolfo Ibáñez (UAI),
     brindar un enlace a la licencia e indicar si se han realizado cambios.
   - NoComercial (NC): no puede utilizar el material con fines comerciales.
   - CompartirIgual (SA): si remezcla, transforma o crea a partir del material,
@@ -26,6 +26,6 @@ Texto legal completo (legal code):
 Resumen legible:
   https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es
 
-AVISO: SecureShop es una aplicación educativa e intencionalmente insegura, usada
-como caso de estudio. No debe desplegarse en producción ni tratar datos personales
-reales. Los datos incluidos (usuarios, mascotas) son de ejemplo.
+AVISO: SecureShop es material de los cursos. No es un producto y no tiene
+garantía de ningún tipo: ni de funcionamiento, ni de seguridad, ni de aptitud
+para un uso distinto del curso. Los datos incluidos son de ejemplo.

@@ -9,6 +9,9 @@ env/
 .DS_Store
 ._*
 
+# Build
+dist/
+
 # Local runtime
 *.log
 .pytest_cache/

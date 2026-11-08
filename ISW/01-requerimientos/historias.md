@@ -26,7 +26,7 @@ Salen del backlog del commit `1cc15f0`. No hay un tablero de GitHub verificado: 
 
 ## Tickets de seguridad
 
-No son historias de usuario. Siguen abiertos. No se cierran en este corte. El proceso para mirarlos con Antares y con ZAP está en [`../operacion.md`](../operacion.md).
+No son historias de usuario. Siguen abiertos. No se cierran en este corte. Antares, ZAP y un caso de terminal por cada ítem del Top 10 están en [`../../seguridad-ti/README.md`](../../seguridad-ti/README.md).
 
 | Ticket | Qué pide | Sigue abierto en |
 |---|---|---|

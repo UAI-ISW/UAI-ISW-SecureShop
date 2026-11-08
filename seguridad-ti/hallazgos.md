@@ -1,8 +1,8 @@
 # Auditoría OWASP — SecureShop
 
-**Alcance:** código de `SecureShop/` (versión original) y `SecureShopRefactorizadoMVC/`.
+**Alcance:** `SecureShop/` (`secureshop.py` en el puerto 5002 y `api.py` en el 5001).
 **Metodología:** revisión de código (SAST manual) mapeada a **OWASP Top 10:2021**.
-**Propósito:** foto del legado. El detalle de abajo cita código que ya no está (`securesoftware.py`, clave en claro, login sin sesión). `SecureShopRefactorizadoMVC/` no se usa.
+**Propósito:** foto del código anterior. El detalle de abajo cita código que ya no está (`securesoftware.py`, clave en claro, login sin sesión). Los casos que se corren hoy están en [`casos.md`](casos.md).
 
 La aplicación que corre hoy es `secureshop.py` en `:5002` y `api.py` en `:5001`.
 
@@ -17,7 +17,7 @@ La aplicación que corre hoy es `secureshop.py` en `:5002` y `api.py` en `:5001`
 | H7 | CORS abierto | Abierto |
 | H8 | Sin registro de quién inscribió | Abierto |
 
-El plan dinámico sigue en [`owasp-secureshop-test-plan.md`](owasp-secureshop-test-plan.md) y no está ejecutado. Configuración, CI, Antares y ZAP están en [`../docs/operacion.md`](../docs/operacion.md).
+Los casos están en [`casos.md`](casos.md). ZAP está en [`zap.md`](zap.md). Antares está en [`antares.md`](antares.md).
 
 ## Resumen de hallazgos (legado)
 
@@ -71,7 +71,7 @@ ejecución de código si se dispara una excepción.
 - **Remediación:** `debug=False` en cualquier despliegue; controlar por variable de entorno.
 
 ### H6 — Secretos hardcodeados (A05 / A07)
-`admin/colocolo` en `api.py` y `app.secret_key = 'tu_clave_secreta_aqui'` en `app.py` (MVC).
+`admin` / `colocolo` como valor de relleno en `api.py`, y `dev-only-change-me` como `secret_key` de relleno en `secureshop.py`.
 - **Remediación:** secretos por variable de entorno / gestor de secretos; nunca en el repo.
 
 ### H7 — CORS abierto (A05)

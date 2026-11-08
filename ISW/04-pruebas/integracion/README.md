@@ -22,7 +22,7 @@ Bottom-up quiere decir que el primer ensamble es el de las piezas de más abajo.
 | 3 | `api.py` + `Repositorio`, por HTTP de prueba | ¿El POST guarda la foto y el GET la devuelve, y el listado trae el RUT? | `test_nivel3_la_api_guarda_y_devuelve_la_imagen` |
 | 4 | Presentación Flask | ¿El login y las estadísticas se ven como dicen los criterios? | `tests/test_acceptance.py`. El plan con el mandante es [`../../01-requerimientos/plan-de-aceptacion.md`](../../01-requerimientos/plan-de-aceptacion.md) |
 
-El nivel 3 usa el cliente de prueba de Flask (`api_client`). No hace falta `./run-local.sh`. El nivel 2 no usa HTTP: llama a `pagar_carrito` en el mismo proceso. Por eso un fallo del nivel 2 no se confunde con “la API está caída”.
+El nivel 3 usa el cliente de prueba de Flask (`api_client`). No hace falta tener los puertos 5001 y 5002 encendidos. El nivel 2 no usa HTTP: llama a `pagar_carrito` en el mismo proceso. Por eso un fallo del nivel 2 no se confunde con “la API está caída”.
 
 `tests/test_hallazgos.py` no es un nivel de esta escalera. Fija debilidades que se dejan (la API responde sin sesión, `debug=True` sigue en el fuente). Si alguien cierra T01 en silencio, ese archivo tiene que fallar.
 

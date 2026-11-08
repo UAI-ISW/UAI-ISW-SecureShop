@@ -6,7 +6,7 @@ Se usa Python, Flask, HTML de plantilla (Jinja), CSS, SQLite y pytest. El navega
 
 ## Por qué esta pila, acá
 
-El curso necesita ver el pedido, el HTML, el SQL y la prueba. Flask con plantillas se levanta con `run-local.sh`, sin compilar. La tienda y la API son dos procesos: ZAP y la revisión de código pueden mirar cada borde. SQLite es un archivo: la mascota, la foto y el hash siguen ahí después de bajar los procesos. `nucleo/` se prueba con pytest, caso válido e inválido, sin abrir el navegador.
+El curso necesita ver el pedido, el HTML, el SQL y la prueba. Flask con plantillas se levanta con un comando por proceso, sin compilar. La tienda y la API son dos procesos, y cada uno se puede revisar por su lado. SQLite es un archivo: la mascota, la foto y el hash siguen ahí después de bajar los procesos. `nucleo/` se prueba con pytest, caso válido e inválido, sin abrir el navegador.
 
 Node.js o una pantalla reactiva (React, Vue, Svelte) servirían para otra meta: muchas conexiones a la vez, o un carrito que se redibuja sin recargar. Acá esconderían el recorrido detrás de un empaquetador.
 
